@@ -6,6 +6,7 @@ import { HomeScreen } from './screens/HomeScreen';
 import { SecondScreen } from './screens/SecondScreen';
 import { ThirdScreen } from './screens/ThirdScreen';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import { SwitchSmileRN, OfferBeaconSelectMode } from 'react-native-rnssbpsdk';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,6 +41,82 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+const setup = async () => {
+  //Init SDK
+  SwitchSmileRN.init();
+  SwitchSmileRN.enableDebug();
+  //Enable beacon, gps, ssid Popup
+  SwitchSmileRN.enablePopup(true, true, true);
+
+  //Set Scanner Adapter and listener events from SDK
+  SwitchSmileRN.setSSBPSdkScannerAdapter(OfferBeaconSelectMode.NEAREST);
+  SwitchSmileRN.subscribe_ssbpOnSDKReady(
+    async (params) => {
+      console.log('ssbpOnSDKReady:' + params.success);
+    }
+  )
+  SwitchSmileRN.subscribe_ssbpOnOfferReceive(
+    (params) => {
+      //Example use
+      const isForegroundMap = params.isForegroundMap;
+      const offerMap = params.offerMap;
+      console.log('ssbpOnOfferReceive:\nisForegroundMap: ' + isForegroundMap + '\noffer: ' + JSON.stringify(offerMap));
+    }
+  )
+  SwitchSmileRN.subscribe_ssbpScannerChangeBeacons(
+    (params) => {
+      //Example use
+      const regionDatasArray = params.regions;
+      const beaconDatasArray = params.beacons;
+      const jsonArray = [];
+
+      regionDatasArray.forEach(element => {
+        jsonArray.push(JSON.stringify(element))
+      });
+
+      beaconDatasArray.forEach(element => {
+        jsonArray.push(JSON.stringify(element))
+      });
+
+      console.log('ssbpScannerChangeBeacons ' + jsonArray);
+    }
+  )
+  SwitchSmileRN.subscribe_ssbpScannerNeedPermissionRequest(
+    (params) => {
+      //Example use
+      const stringArray = params.permissions;
+      console.log('ssbpScannerNeedPermissionRequest ' + stringArray);
+      SwitchSmileRN.requestPermission();
+    }
+  )
+  SwitchSmileRN.subscribe_ssbpScannerNeedPermissionBackgroundRequest(
+    () => {
+      console.log('ssbpScannerNeedPermissionBackgroundRequest');
+      SwitchSmileRN.requestPermission();
+    }
+  )
+  SwitchSmileRN.subscribe_ssbpScannerNeedRequestPermissionRationale(
+    () => {
+      console.log('ssbpScannerNeedRequestPermissionRationale');
+    }
+  )
+  SwitchSmileRN.subscribe_ssbpScannerDidPermissionGranted(
+    () => {
+      console.log('ssbpScannerDidPermissionGranted');
+      SwitchSmileRN.start();
+    }
+  )
+
+  //Start SDK
+  const start = async () => {
+    if (await SwitchSmileRN.requirePermission()) {
+      SwitchSmileRN.start();
+    }
+  }
+  start();
+}
+setup();
 
 const styles = StyleSheet.create({
   container: {

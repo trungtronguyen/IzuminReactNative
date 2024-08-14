@@ -1,5 +1,6 @@
 package nguyen.trong.trung.izuminreactnative
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 
@@ -9,6 +10,7 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnable
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 
 import expo.modules.ReactActivityDelegateWrapper
+import com.rnssbpsdk.RnssbpsdkModule
 
 class MainActivity : ReactActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,6 +19,7 @@ class MainActivity : ReactActivity() {
     // This is required for expo-splash-screen.
     setTheme(R.style.AppTheme);
     super.onCreate(null)
+      RnssbpsdkModule.setNotificationIntent(this, intent);
   }
 
   /**
@@ -58,4 +61,16 @@ class MainActivity : ReactActivity() {
       // because it's doing more than [Activity.moveTaskToBack] in fact.
       super.invokeDefaultOnBackPressed()
   }
+
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        RnssbpsdkModule.setNotificationIntent(this, intent)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        RnssbpsdkModule.onPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
 }
