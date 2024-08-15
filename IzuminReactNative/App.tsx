@@ -1,4 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
+import { useState, useEffect, useRef } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,78 +13,51 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
 
-//Init SDK
-if (Platform.OS === 'ios') {
-  console.log('Setup SSBP SDK for iOS');
-  setupIOS();
-}
+  //Init SDK
+  if (Platform.OS === 'ios') {
+    console.log('Setup SSBP SDK for iOS');
+    setupIOS();
+  }
 
-if (Platform.OS === 'android') {
-  console.log('Setup SSBP SDK for Android');
-  setupAndroid();
-}
+  if (Platform.OS === 'android') {
+    console.log('Setup SSBP SDK for Android');
+    setupAndroid();
+  }
 
-SwitchSmileRN.setDetectBeacon(true);
-SwitchSmileRN.setUseNotification(true);
-SwitchSmileRN.enablePopup(true, true, true);
-SwitchSmileRN.setOfferBeaconSelectMode(OfferBeaconSelectMode.NEAREST);
-SwitchSmileRN.setLocaleId("kLocaleID");
-console.log('SSBP SDK version =' + SwitchSmileRN.getSDKVersion());
-
-const setCustomerIds = async () => {
-  // custom your customerIds with key and value 
-  var customerIds = [
-    {
-      key: "name",
-      value: "My Boy"
-    },
-    {
-      key: "birthday",
-      value: "12/13/1989"
-    },
-    {
-      key: "sex",
-      value: "female"
-    },
-  ];
-  SwitchSmileRN.setCustomerIds(customerIds, (params) => {
-    console.log("setCustomerIds = " + JSON.stringify(params));
-  })//call to setCustomerIds native function
-}
-setCustomerIds()
-
-
-
-
-
+  SwitchSmileRN.setDetectBeacon(true);
+  SwitchSmileRN.setUseNotification(true);
+  SwitchSmileRN.enablePopup(true, true, true);
+  SwitchSmileRN.setOfferBeaconSelectMode(OfferBeaconSelectMode.NEAREST);
+  SwitchSmileRN.setLocaleId("kLocaleID");
+  console.log('SSBP SDK version =' + SwitchSmileRN.getSDKVersion());
 
   return (
-   <NavigationContainer>
-    <Tab.Navigator screenOptions={({route}) => ({
-      tabBarIcon: (focused, color, size) => {
-        let iconName
-        switch (route.name) {
-          case 'Home':
-            iconName = '1'
-            break
-          case 'Second':
-            iconName = '2'
-            break
-          case 'Third':
-            iconName = '3'
-            break
-          default:
-            break
-        }
-        return <Icon name={iconName} size={20}/>
-      },
-      tabBarActiveTintColor: 'blue',
-      tabBarInactiveTintColor: 'gray'
-    })}>
-      <Tab.Screen name='Home' component={HomeScreen}/>
-      <Tab.Screen name='Second' component={SecondScreen}/>
-      <Tab.Screen name='Third' component={ThirdScreen}/>
-    </Tab.Navigator>
+    <NavigationContainer>
+      <Tab.Navigator screenOptions={({ route }) => ({
+        tabBarIcon: (focused, color, size) => {
+          let iconName
+          switch (route.name) {
+            case 'Home':
+              iconName = '1'
+              break
+            case 'Second':
+              iconName = '2'
+              break
+            case 'Third':
+              iconName = '3'
+              break
+            default:
+              break
+          }
+          return <Icon name={iconName} size={20} />
+        },
+        tabBarActiveTintColor: 'blue',
+        tabBarInactiveTintColor: 'gray'
+      })}>
+        <Tab.Screen name='Home' component={HomeScreen} />
+        <Tab.Screen name='Second' component={SecondScreen} />
+        <Tab.Screen name='Third' component={ThirdScreen} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
@@ -107,21 +81,21 @@ const setupAndroid = async () => {
       console.log('ssbpOnOfferReceive:\nisForeground: ' + isForeground + '\noffer: ' + JSON.stringify(offer));
     }
   )
-  SwitchSmileRN.subscribe_ssbpScannerChangeBeacons(
-    (params) => {
-      //Example use
-      const regionDatasArray = params.regions;
-      const beaconDatasArray = params.beacons;
-      const jsonArray = [];
-      regionDatasArray.forEach(element => {
-        jsonArray.push(JSON.stringify(element))
-      });
-      beaconDatasArray.forEach(element => {
-        jsonArray.push(JSON.stringify(element))
-      });
-      console.log('Android-ssbpScannerChangeBeacons ' + jsonArray);
-    }
-  )
+  // SwitchSmileRN.subscribe_ssbpScannerChangeBeacons(
+  //   (params) => {
+  //     //Example use
+  //     const regionDatasArray = params.regions;
+  //     const beaconDatasArray = params.beacons;
+  //     const jsonArray = [];
+  //     regionDatasArray.forEach(element => {
+  //       jsonArray.push(JSON.stringify(element))
+  //     });
+  //     beaconDatasArray.forEach(element => {
+  //       jsonArray.push(JSON.stringify(element))
+  //     });
+  //     console.log('Android-ssbpScannerChangeBeacons ' + jsonArray);
+  //   }
+  // )
   SwitchSmileRN.subscribe_ssbpScannerNeedPermissionRequest(
     (params) => {
       SwitchSmileRN.requestPermission();
@@ -167,11 +141,11 @@ const setupIOS = async () => {
     }
   )
   SwitchSmileRN.registerToWatchBeaconsDetected();
-  SwitchSmileRN.subscribe_iOSwatchBeaconsDetected(
-    async (params) => {
-      console.log('iOS_iOSwatchBeaconsDetected:' + JSON.stringify(params));
-    }
-  )
+  // SwitchSmileRN.subscribe_iOSwatchBeaconsDetected(
+  //   async (params) => {
+  //     console.log('iOS_iOSwatchBeaconsDetected:' + JSON.stringify(params));
+  //   }
+  // )
   SwitchSmileRN.registerToDidReceiveAds();
   SwitchSmileRN.subscribe_iOSdidReceiveAds(
     async (params) => {
@@ -180,9 +154,6 @@ const setupIOS = async () => {
   )
   SwitchSmileRN.start();
 }
-
-
-
 
 const styles = StyleSheet.create({
   container: {
