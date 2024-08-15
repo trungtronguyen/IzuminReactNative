@@ -1,0 +1,2 @@
+id,appName,appKey,secretKey,host,useBeaconLog,useOfferLog,useNotification,useAdsLog,useLaunchLog,deviceId,csvFacility,csvFloor,csvBeacon,csvNode,csvEdge
+1,App test for SDK,sdk-testing,R2fKgsEfPWaomLrvjxPKGYVemGMV29j13HrTNhA71yZEeOMBE8iyUJC4l5GY3mAA,https://dev.pinable.jp,true,true,false,false,false,,,,,,

@@ -3,6 +3,8 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
 
+#import "Rnssbpsdk.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -12,7 +14,7 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
-
+  [Rnssbpsdk registerNotification:application UNUserNotificationCenterDelegate:self completion:nil];
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
@@ -57,6 +59,27 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
   return [super application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+  [Rnssbpsdk applicationDidEnterBackground:application];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+  [Rnssbpsdk applicationDidBecomeActive:application];
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+  [Rnssbpsdk applicationWillTerminate:nil];
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
+  [Rnssbpsdk userNotificationCenter:center willPresentNotification:notification withCompletionHandler:completionHandler];
+}
+
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+  [Rnssbpsdk applicationDidReceiveLocalNotification:response];
+  completionHandler();
 }
 
 @end
