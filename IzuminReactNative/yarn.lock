@@ -947,7 +947,7 @@
     json5 "^2.2.2"
     write-file-atomic "^2.3.0"
 
-"@expo/metro-config@0.18.11", "@expo/metro-config@^0.18.11":
+"@expo/metro-config@0.18.11":
   version "0.18.11"
   resolved "https://registry.npmjs.org/@expo/metro-config/-/metro-config-0.18.11.tgz"
   integrity sha512-/uOq55VbSf9yMbUO1BudkUM2SsGW1c5hr9BnhIqYqcsFv0Jp5D3DtJ4rljDKaUeNLbwr6m7pqIrkSMq5NrYf4Q==
@@ -1545,16 +1545,6 @@
     "@react-native/babel-preset" "0.74.87"
     hermes-parser "0.19.1"
     nullthrows "^1.1.1"
-
-"@react-native/metro-config@0.74.87":
-  version "0.74.87"
-  resolved "https://registry.npmjs.org/@react-native/metro-config/-/metro-config-0.74.87.tgz"
-  integrity sha512-WjXk7GmzL7/+e5qqc9uumQSl6uCqNlpo8LaKuMxxlUfQ6DsWSXIdbLXmD1k5qTURjL0fZjVQGszgvT1xKYifaQ==
-  dependencies:
-    "@react-native/js-polyfills" "0.74.87"
-    "@react-native/metro-babel-transformer" "0.74.87"
-    metro-config "^0.80.3"
-    metro-runtime "^0.80.3"
 
 "@react-native/normalize-colors@0.74.85":
   version "0.74.85"
@@ -4360,7 +4350,7 @@ metro-cache@0.80.10:
     flow-enums-runtime "^0.0.6"
     metro-core "0.80.10"
 
-metro-config@0.80.10, metro-config@^0.80.10, metro-config@^0.80.3:
+metro-config@0.80.10, metro-config@^0.80.3:
   version "0.80.10"
   resolved "https://registry.npmjs.org/metro-config/-/metro-config-0.80.10.tgz"
   integrity sha512-0GYAw0LkmGbmA81FepKQepL1KU/85Cyv7sAiWm6QWeV6AcVCpsKg6jGLqGHJ0LLPL60rWzA4TV1DQAlzdJAEtA==
